@@ -34,8 +34,8 @@ public:
 	 * gear ratio is 1988/1.2.
 	 */
 	CANTalonEnclosure(	std::string name,
-					std::shared_ptr<WPI_VictorSPX> m_moveMotor,
-					std::shared_ptr<WPI_TalonSRX> m_turnMotor,
+					std::shared_ptr<WPI_TalonSRX> m_moveMotor,
+					std::shared_ptr<WPI_VictorSPX> m_turnMotor,
 					double m_gearRatio);
 	~CANTalonEnclosure();
 
@@ -95,7 +95,7 @@ private:
 	 */
 	double ConvertAngle(double angle, double encoderValue);
 
-	std::shared_ptr<WPI_VictorSPX> moveMotor;
+	std::shared_ptr<SpeedController> moveMotor;
 	std::shared_ptr<WPI_TalonSRX> turnMotor;
 
 	std::string name;
@@ -103,4 +103,3 @@ private:
 	bool reverseEncoder = false;
 	bool reverseSteer = false;
 };
-

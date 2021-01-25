@@ -1,6 +1,9 @@
 #include "CANTalonEnclosure.h"
 
-CANTalonEnclosure::CANTalonEnclosure(std::string name, std::shared_ptr<WPI_VictorSPX> m_moveMotor,std::shared_ptr<WPI_TalonSRX> m_turnMotor,double m_gearRatio)
+CANTalonEnclosure::CANTalonEnclosure(	std::string name,
+										std::shared_ptr<WPI_VictorSPX> m_moveMotor,
+										std::shared_ptr<WPI_TalonSRX> m_turnMotor,
+										double m_gearRatio)
 {
 	this->name = name;
 	moveMotor = m_moveMotor;
