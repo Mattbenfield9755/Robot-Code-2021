@@ -1,12 +1,15 @@
 #include "Robot.h"
 #include "frc/WPILib.h"
 #include "RobotDriveSwerve.h"
-#include "CANTalonEnclosure.h"
+#include "GenericEnclosure.h"
+#include "RobotDriveSwerve.h"
 #include "ctre/Phoenix.h"
 
   const double GEAR_RATIO = (1988/1.2);
   const double L = 19;
   const double W = 27.5; 
+
+  frc::Joystick drive{0};
   
   WPI_TalonSRX speedMotor1 {11}; 
   WPI_TalonSRX speedMotor2 {21};
@@ -49,14 +52,17 @@ void Robot::AutonomousPeriodic() {}
 void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
 
-        CANTalonEnclosure swerveEnclosure1{"enc 1", speedMotor1, angleMotor1,  GEAR_RATIO};
+        GenericEnclosure GenericEnclosure{"enc 1", std::shared_ptr<WPI_TalonSRX>speedMotor1, std::shared_ptr<WPI_TalonSRX>angleMotor1, motor1Encoder, GEAR_RATIO};
   //      CANTalonEnclosure swerveEnclosure2{"enc 2", GEAR_RATIO};
       //  CANTalonEnclosure swerveEnclosure3{"enc 3", GEAR_RATIO};
       //  CANTalonEnclosure swerveEnclosure4{"enc 4", GEAR_RATIO};
 
 	//Swerve Drive initialization
-        RobotDriveSwerve * swerveDrive= new SwerveDrive(swerveEnclosure1, swerveEnclosure2, swerveEnclosure3, swerveEnclosure4,
-					W, L);
+   // RobotDriveSwerve * swerveDrive= new SwerveDrive(swerveEnclosure1, swerveEnclosure2, swerveEnclosure3, swerveEnclosure4,
+				//	W, L);
+          
+          //swerveDrive->SetMode();
+          //swerveDrive->move(drive.GetRawAxis(1), drive.GetRawAxis(2), drive.GetRawAxis(3), 0);
 
 }
 

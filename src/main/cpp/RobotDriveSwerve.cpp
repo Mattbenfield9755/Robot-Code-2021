@@ -48,19 +48,10 @@ int RobotDriveSwerve::GetMode()
 {
 	return m_mode;
 }
-void RobotDriveSwerve::SetMode(DriveMode mode)
+void RobotDriveSwerve::SetMode()
 {
-	switch(mode)
-	{
-	case(kFieldCentric):
 		m_mode = kFieldCentric;
-		break;
-	case(kRobotCentric):
-		m_mode = kRobotCentric;
-		break;
-	default:
-		DriverStation::ReportError("ERROR: Invalid drivetrain mode input");
-	}
+		
 }
 void RobotDriveSwerve::ToggleMode() {
 	if(GetMode() == kRobotCentric) {

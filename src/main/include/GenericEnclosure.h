@@ -2,26 +2,23 @@
 
 #include "frc/WPILib.h"
 #include "SwerveEnclosure.h"
-#include "ctre/phoenix/MotorControl/CAN/TalonSRX.h"
 #include "ctre/Phoenix.h"
+#include <iostream>
 
-#include <math.h>
+
 
 /*
- * Used for enclosing a CANTalon speed controller (rotational movement) and a
- * speed controller (directional movement) in order to control a single swerve
- * wheel.  The CANTalon speed controller must have an encoder wired to it in
- * order for this enclosure to function.
+ * Used for enclosing a speed controller (rotational movement) and aanother speed
+ * controller (directional movement) in order to control a single swerve wheel.
+ * An encoder also needs to be used in order to keep track of the wheels current
+ * angle.
  *
  * This class inherits from the SwerveEnclosure class, used by
  * RobotDriveSwerve objects in order for easy control of the swerve system. This
  * class can be inherited from to allow for modification and support different
  * hardware designs.
- *
- * This enclosure requires CTRE's CANTalon libraries in order to be used.
  */
-class CANTalonEnclosure : public SwerveEnclosure {
-
+class GenericEnclosure : public SwerveEnclosure {
 public:
 	enum MotorType{
 		MoveMotor,
@@ -29,15 +26,16 @@ public:
 	};
 
 	/*
-	 * Requires any speed controller for controlling wheel direction, a CANTalon
-	 * controller to control wheel rotation, and a gear ratio value.  The default
-	 * gear ratio is 1988/1.2.
+	 * Requires any two speed controllers for controlling the movement and
+	 * rotational movement, as well as needing an encoder and gear ratio value.
+	 * The default gear ratio is 1988/1.2.
 	 */
-	CANTalonEnclosure(	std::string name,
-					std::shared_ptr<WPI_TalonSRX> m_moveMotor,
+	GenericEnclosure(std::string name,
+					 std::shared_ptr<WPI_TalonSRX> m_moveMotor,
 					std::shared_ptr<WPI_VictorSPX> m_turnMotor,
+					std::shared_ptr<frc::Encoder> m_encoder,
 					double m_gearRatio);
-	~CANTalonEnclosure();
+	~GenericEnclosure();
 
 	/*
 	 * Move the wheel to the given speed and rotational values.
@@ -58,7 +56,7 @@ public:
 	/*
 	 * Sets the PIDF value being used by a swerve enclosure
 	 */
-	void SetPID(double P, double I, double D, double F = 0);
+	void SetPID(double P, double I, double D, double F);
 	/*
 	 * Outputs encoder values for the corresponding motor
 	 */
@@ -67,14 +65,7 @@ public:
 	 * Returns the name of the enclosure
 	 */
 	std::string GetName() override;
-	/*
-	 * Reverse encoder direction
-	 */
-	void SetReverseEncoder(bool reverseEncoder);
-	/*
-	 * Reverse steer motor direction
-	 */
-	void SetReverseSteerMotor(bool reverseSteer);
+
 private:
 	/*
 	 * Using the desired angle for the wheel and the current encoder position,
@@ -95,11 +86,11 @@ private:
 	 */
 	double ConvertAngle(double angle, double encoderValue);
 
-	std::shared_ptr<SpeedController> moveMotor;
-	std::shared_ptr<WPI_TalonSRX> turnMotor;
+	std::shared_ptr<WPI_TalonSRX> moveMotor;
+	std::shared_ptr<WPI_VictorSPX> turnMotor;
+	std::unique_ptr<frc::PIDController> controlPID;
+	std::shared_ptr<frc::Encoder> encoder;
 
 	std::string name;
 	double gearRatio = 1988/1.2;
-	bool reverseEncoder = false;
-	bool reverseSteer = false;
 };

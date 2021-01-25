@@ -9,21 +9,6 @@
 #include "SwerveMath.h"
 #include "SwerveEnclosure.h"
 
-/*
- * This is used for easily controllig the movement of a robot with a swerve
- * drivetrain.  Objects of this class are created using seperate SwerveEnclosure
- * objects, that store and move all of the systems corresponding speed controllers.
- *
- * Each swerve system (with the help of a gyroscope) allows for switching between
- * two modes of movement, robot centric and field centric.  Field centric mode
- * causes the swerve system to always keep the forward/backward and directional
- * movement to stay relative to zero degrees.  Robot centric mode causes the swerve
- * system to act with normal cartesian movement.
- *
- * In order to modify this swerve drive control to support different hardware
- * interfaces not offered by our libraries, either modify currectly existing
- * SwerveEnclosure classes, or create your own SwerveEnclosure class.
- */
 class RobotDriveSwerve
 {
 public:
@@ -65,7 +50,7 @@ public:
 	 * Sets the swerve drive mode (kFieldCentric - 0, kRobotCentric - 1)
 	 * Returns an error if the value given is incorrect
 	 */
-	void SetMode(DriveMode mode);
+	void SetMode();
 
 	/*
 	 * Toggles the swerve drive mode (Toggles between field and robot centric)

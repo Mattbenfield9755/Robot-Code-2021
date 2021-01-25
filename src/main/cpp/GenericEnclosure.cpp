@@ -1,19 +1,25 @@
-#include "CANTalonEnclosure.h"
+#include "GenericEnclosure.h"
+#include <iostream>
 
-CANTalonEnclosure::CANTalonEnclosure(	std::string name,
-										std::shared_ptr<WPI_VictorSPX> m_moveMotor,
-										std::shared_ptr<WPI_TalonSRX> m_turnMotor,
-										double m_gearRatio)
+GenericEnclosure::GenericEnclosure(	std::string name,
+									std::shared_ptr<WPI_TalonSRX> m_moveMotor,
+									std::shared_ptr<WPI_VictorSPX> m_turnMotor,
+									std::shared_ptr<frc::Encoder> m_encoder,
+									double m_gearRatio)
 {
 	this->name = name;
 	moveMotor = m_moveMotor;
-	moveMotor = m_moveMotor;
 	turnMotor = m_turnMotor;
 	gearRatio = m_gearRatio;
-}
-CANTalonEnclosure::~CANTalonEnclosure(){ return; }
 
-void CANTalonEnclosure::MoveWheel(double speedVal, double rotationVal)
+	encoder = m_encoder;
+	controlPID.reset(new frc::PIDController(10.0, 0.0, 0.0, encoder.get(), turnMotor.get()));
+	controlPID->SetSetpoint(0.0);
+	encoder->Reset();
+}
+GenericEnclosure::~GenericEnclosure(){ return; }
+
+void GenericEnclosure::MoveWheel(double speedVal, double rotationVal)
 {
 	rotationVal = ConvertAngle(rotationVal, GetEncoderVal());
 
@@ -28,56 +34,46 @@ void CANTalonEnclosure::MoveWheel(double speedVal, double rotationVal)
 	}
 
 	SetSpeed(speedVal);
-	if(speedVal != 0.0)
+	if(speedVal != 0)
 		SetAngle(rotationVal);
 }
 
-void CANTalonEnclosure::StopWheel()
+void GenericEnclosure::StopWheel()
 {
 	moveMotor->StopMotor();
 	turnMotor->StopMotor();
 }
 
-void CANTalonEnclosure::SetInverted(CANTalonEnclosure::MotorType type, bool val)
+void GenericEnclosure::SetInverted(GenericEnclosure::MotorType type, bool val)
 {
 	if(type == MotorType::TurnMotor)
-	{
 		turnMotor->SetInverted(val);
-	}
 	else if(type == MotorType::MoveMotor)
 		moveMotor->SetInverted(val);
 }
 
-void CANTalonEnclosure::SetPID(double P, double I, double D, double F) {//Changed
-	turnMotor->Config_kP(0, P, 100);
-	turnMotor->Config_kI(0, I, 100);
-	turnMotor->Config_kD(0, D, 100);
-	turnMotor->Config_kF(0, F, 100);
-}
-
-//Outputs encoder values for the corresponding motor
-double CANTalonEnclosure::GetEncoderVal()
+void GenericEnclosure::SetPID(double P, double I, double D, double F)
 {
-	if(reverseEncoder)
-		return -1*turnMotor->GetSelectedSensorPosition(0);
-	else
-		return turnMotor->GetSelectedSensorPosition(0);
+	controlPID->SetPID(P, I, D, F);
 }
 
-void CANTalonEnclosure::SetSpeed(double speedVal)
+double GenericEnclosure::GetEncoderVal()
+{
+	return encoder->Get();
+}
+
+void GenericEnclosure::SetSpeed(double speedVal)
 {
 	moveMotor->Set(speedVal);
 }
 
-void CANTalonEnclosure::SetAngle(double desiredAngle)
+void GenericEnclosure::SetAngle(double desiredAngle)
 {
-	if(reverseSteer)
-		turnMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Position, -1*desiredAngle*gearRatio);
-	else
-		turnMotor->Set(ctre::phoenix::motorcontrol::ControlMode::Position, desiredAngle*gearRatio);
+	controlPID->SetSetpoint(desiredAngle);
+	controlPID->Enable();
 }
 
-bool CANTalonEnclosure::ShouldReverse(double wa)
+bool GenericEnclosure::ShouldReverse(double wa)
 {
 	double ea = GetEncoderVal();
 	ea /= gearRatio;
@@ -98,7 +94,7 @@ bool CANTalonEnclosure::ShouldReverse(double wa)
 	else return false;
 }
 
-double CANTalonEnclosure::ConvertAngle(double angle, double encoderValue)
+double GenericEnclosure::ConvertAngle(double angle, double encoderValue)
 {
 	//angles are between -.5 and .5
 	//This is to allow the motors to rotate in continuous circles (pseudo code on the Team 4048 forum)
@@ -117,17 +113,7 @@ double CANTalonEnclosure::ConvertAngle(double angle, double encoderValue)
 	return temp;
 }
 
-std::string CANTalonEnclosure::GetName()
+std::string GenericEnclosure::GetName()
 {
 	return name;
-}
-
-void CANTalonEnclosure::SetReverseEncoder(bool reverseEncoder)
-{
-	this->reverseEncoder = reverseEncoder;
-}
-
-void CANTalonEnclosure::SetReverseSteerMotor(bool reverseSteer)
-{
-	this->reverseSteer = reverseSteer;
 }
