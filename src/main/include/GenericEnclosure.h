@@ -1,11 +1,9 @@
 #pragma once
 
 #include "frc/WPILib.h"
-#include "SwerveEnclosure.h"
 #include "ctre/Phoenix.h"
-#include <iostream>
 
-
+#include "SwerveEnclosure.h"
 
 /*
  * Used for enclosing a speed controller (rotational movement) and aanother speed
@@ -31,10 +29,10 @@ public:
 	 * The default gear ratio is 1988/1.2.
 	 */
 	GenericEnclosure(std::string name,
-					 std::shared_ptr<WPI_TalonSRX> m_moveMotor,
-					std::shared_ptr<WPI_VictorSPX> m_turnMotor,
-					std::shared_ptr<frc::Encoder> m_encoder,
-					double m_gearRatio);
+									std::shared_ptr<WPI_TalonSRX> m_moveMotor,
+									std::shared_ptr<WPI_VictorSPX> m_turnMotor,
+									std::shared_ptr<frc::Encoder> m_encoder,
+									double m_gearRatio);
 	~GenericEnclosure();
 
 	/*

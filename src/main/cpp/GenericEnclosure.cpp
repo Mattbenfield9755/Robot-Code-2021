@@ -1,5 +1,4 @@
 #include "GenericEnclosure.h"
-#include <iostream>
 
 GenericEnclosure::GenericEnclosure(	std::string name,
 									std::shared_ptr<WPI_TalonSRX> m_moveMotor,
