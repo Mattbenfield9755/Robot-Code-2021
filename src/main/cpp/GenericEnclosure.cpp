@@ -12,7 +12,7 @@ GenericEnclosure::GenericEnclosure(	std::string name,
 	gearRatio = m_gearRatio;
 
 	encoder = m_encoder;
-	controlPID.reset(new frc::PIDController(10.0, 0.0, 0.0, encoder.get(), turnMotor.get()));
+	controlPID.reset(new frc::PIDController(.7, 0.0, 0.0, encoder.get(), turnMotor.get()));
 	controlPID->SetSetpoint(0.0);
 	encoder->Reset();
 }

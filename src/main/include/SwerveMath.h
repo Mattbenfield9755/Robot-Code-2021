@@ -41,7 +41,7 @@ public:
 
 private:
 	static constexpr double NO_ANGLE = -999;
-	static constexpr double PI = acos(-1.0);
+	static constexpr double PI = 3.14;
 
 	/*
 	 * Copies the speed and angle values into a pointer in order to be used by

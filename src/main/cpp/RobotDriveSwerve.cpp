@@ -50,7 +50,7 @@ int RobotDriveSwerve::GetMode()
 }
 void RobotDriveSwerve::SetMode()
 {
-		m_mode = kFieldCentric;
+		m_mode = kRobotCentric;
 }
 void RobotDriveSwerve::ToggleMode() {
 	if(GetMode() == kRobotCentric) {

@@ -9,6 +9,7 @@
   const double L = 19;
   const double W = 27.5; 
 
+
   frc::Joystick drive{0};
   
   std::shared_ptr<WPI_TalonSRX> speedMotor1; 
@@ -69,19 +70,24 @@ void Robot::TeleopInit() {
   angleMotor4= std::make_shared<WPI_VictorSPX>(42);
   motorEncoder4= std::make_shared<frc::Encoder>(7,6);
 
-
 }
-void Robot::TeleopPeriodic() {
 
-        GenericEnclosure frontLeftWheel{"FrontLeftWheel", speedMotor1, angleMotor1, motorEncoder1, GEAR_RATIO};
-        GenericEnclosure frontRightWheel{"FrontRightWheel", speedMotor2, angleMotor2, motorEncoder2, GEAR_RATIO};
-        GenericEnclosure rearLeftWheel{"RearLeftWheel", speedMotor3, angleMotor3, motorEncoder3, GEAR_RATIO}; 
-        GenericEnclosure rearRightWheel{"RearRightWheel", speedMotor4, angleMotor4, motorEncoder4, GEAR_RATIO};
+void Robot::TeleopPeriodic() { 
 
-	//Swerve Drive initialization
-     RobotDriveSwerve * swerveDrive{frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel,W, L} 
-          //swerveDrive->SetMode();
-          //swerveDrive->move(drive.GetRawAxis(1), drive.GetRawAxis(2), drive.GetRawAxis(3), 0);
+  
+  static GenericEnclosure *swerveEnclosure1 = new GenericEnclosure("enc1", speedMotor1, angleMotor1, motorEncoder1, GEAR_RATIO);
+  static GenericEnclosure *swerveEnclosure2 = new GenericEnclosure("enc2", speedMotor2, angleMotor2, motorEncoder2, GEAR_RATIO);
+ static  GenericEnclosure *swerveEnclosure3 = new GenericEnclosure("enc3", speedMotor3, angleMotor3, motorEncoder3, GEAR_RATIO); 
+  static GenericEnclosure *swerveEnclosure4 = new GenericEnclosure("enc4", speedMotor4, angleMotor4, motorEncoder4, GEAR_RATIO);
+
+   static RobotDriveSwerve *swervy = new RobotDriveSwerve(swerveEnclosure1, swerveEnclosure2, swerveEnclosure3, swerveEnclosure4,W,L);
+
+        swervy->SetMode();
+        //wpi::StringRef mode = swervy->GetMode();
+        //frc::SmartDashboard::PutString("mode ", mode);
+
+          swervy->move(drive.GetRawAxis(5), drive.GetRawAxis(4), drive.GetRawAxis(0), 180);
+         // swervy->move(.5, 0.0, 0.0);
 
 }
 
