@@ -67,7 +67,7 @@ public:
 private:
 	/*
 	 * Using the desired angle for the wheel and the current encoder position,
-	 * it determines if the wheel could be efficient by reversing the rotation
+	 * it determines if the wheel could be efficient by reversing the rotat
 	 * and movement direction.
 	 */
 	bool ShouldReverse(double desiredPos);

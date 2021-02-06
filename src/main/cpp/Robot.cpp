@@ -8,6 +8,7 @@
   const double GEAR_RATIO = (1988/1.2);
   const double L = 19;
   const double W = 27.5; 
+  double fwd, str, rcw;
 
 
   frc::Joystick drive{0};
@@ -42,15 +43,8 @@
 	 */
 
 
-void Robot::RobotInit() {}
-void Robot::RobotPeriodic() {}
-
-void Robot::AutonomousInit() {}
- 
-void Robot::AutonomousPeriodic() {}
-
-void Robot::TeleopInit() {
-  //Enclosure 1
+void Robot::RobotInit() {
+//Enclosure 1
   speedMotor1= std::make_shared<WPI_TalonSRX>(11);
   angleMotor1= std::make_shared<WPI_VictorSPX>(12);
   motorEncoder1= std::make_shared<frc::Encoder>(1,0);
@@ -69,25 +63,56 @@ void Robot::TeleopInit() {
   speedMotor4= std::make_shared<WPI_TalonSRX>(41);
   angleMotor4= std::make_shared<WPI_VictorSPX>(42);
   motorEncoder4= std::make_shared<frc::Encoder>(7,6);
-
 }
+void Robot::RobotPeriodic() {}
 
-void Robot::TeleopPeriodic() { 
+void Robot::AutonomousInit() {}
+ 
+void Robot::AutonomousPeriodic() {}
 
-  
-  static GenericEnclosure *swerveEnclosure1 = new GenericEnclosure("enc1", speedMotor1, angleMotor1, motorEncoder1, GEAR_RATIO);
-  static GenericEnclosure *swerveEnclosure2 = new GenericEnclosure("enc2", speedMotor2, angleMotor2, motorEncoder2, GEAR_RATIO);
- static  GenericEnclosure *swerveEnclosure3 = new GenericEnclosure("enc3", speedMotor3, angleMotor3, motorEncoder3, GEAR_RATIO); 
-  static GenericEnclosure *swerveEnclosure4 = new GenericEnclosure("enc4", speedMotor4, angleMotor4, motorEncoder4, GEAR_RATIO);
+void Robot::TeleopInit() {}
 
-   static RobotDriveSwerve *swervy = new RobotDriveSwerve(swerveEnclosure1, swerveEnclosure2, swerveEnclosure3, swerveEnclosure4,W,L);
+void Robot::TeleopPeriodic() {
 
+  static GenericEnclosure *frontLeftWheel = new GenericEnclosure("frontLeftWheel", speedMotor1, angleMotor1, motorEncoder1, GEAR_RATIO);
+  static GenericEnclosure *frontRightWheel = new GenericEnclosure("frontRightWheel", speedMotor2, angleMotor2, motorEncoder2, GEAR_RATIO);
+ static  GenericEnclosure *rearLeftWheel = new GenericEnclosure("rearLeftWheel", speedMotor3, angleMotor3, motorEncoder3, GEAR_RATIO); 
+  static GenericEnclosure *rearRightWheel = new GenericEnclosure("rearRightWheel", speedMotor4, angleMotor4, motorEncoder4, GEAR_RATIO);
+
+   static RobotDriveSwerve *swervy = new RobotDriveSwerve(frontLeftWheel, frontRightWheel, rearLeftWheel, rearRightWheel,W,L);
+
+    swervy->SetMode();
+     //     swervy->move();
+        //swervy->move(1,1,1,1);
+         //swervy->StopMotor();
         swervy->SetMode();
-        //wpi::StringRef mode = swervy->GetMode();
-        //frc::SmartDashboard::PutString("mode ", mode);
 
-          swervy->move(drive.GetRawAxis(5), drive.GetRawAxis(4), drive.GetRawAxis(0), 180);
-         // swervy->move(.5, 0.0, 0.0);
+        swervy->move(drive.GetRawAxis(1),drive.GetRawAxis(0),drive.GetRawAxis(2),-999.0);
+
+      fwd = -drive.GetRawAxis(5);
+    	str = drive.GetRawAxis(4);
+    	rcw = drive.GetRawAxis(0);
+    	
+    	//Square the values for finer movement
+    /*	if(fwd < 0)
+    		fwd *= fwd * -1;
+    	else
+    		fwd *= fwd;
+    	
+    	if(str < 0)
+    		str *= str * -1;
+    	else
+    		str *= str;
+    	
+    	if(rcw < 0)
+    		rcw *= rcw * -1;
+    	else
+      */
+    		rcw *= rcw;
+        swervy->move(fwd,str,rcw);
+        frc::SmartDashboard::PutNumber("x1",drive.GetRawAxis(1));
+        frc::SmartDashboard::PutNumber("x2",drive.GetRawAxis(0));
+        frc::SmartDashboard::PutNumber("rotate",drive.GetRawAxis(2));
 
 }
 
@@ -101,4 +126,5 @@ void Robot::TestPeriodic() {}
 int main() {
   return frc::StartRobot<Robot>();
 }
+ 
 #endif

@@ -12,8 +12,8 @@ GenericEnclosure::GenericEnclosure(	std::string name,
 	gearRatio = m_gearRatio;
 
 	encoder = m_encoder;
-	controlPID.reset(new frc::PIDController(.7, 0.0, 0.0, encoder.get(), turnMotor.get()));
-	controlPID->SetSetpoint(0.0);
+	controlPID.reset(new frc::PIDController(-.007, 0.0, 0.0, encoder.get(), turnMotor.get()));
+	controlPID->SetSetpoint(90);
 	encoder->Reset();
 }
 GenericEnclosure::~GenericEnclosure(){ return; }
@@ -58,7 +58,8 @@ void GenericEnclosure::SetPID(double P, double I, double D, double F)
 
 double GenericEnclosure::GetEncoderVal()
 {
-	return encoder->Get();
+	return encoder->GetDistance();
+	
 }
 
 void GenericEnclosure::SetSpeed(double speedVal)
@@ -70,6 +71,8 @@ void GenericEnclosure::SetAngle(double desiredAngle)
 {
 	controlPID->SetSetpoint(desiredAngle);
 	controlPID->Enable();
+
+	frc::SmartDashboard::PutNumber("Setpoint", desiredAngle);
 }
 
 bool GenericEnclosure::ShouldReverse(double wa)
@@ -108,6 +111,8 @@ double GenericEnclosure::ConvertAngle(double angle, double encoderValue)
 	if ((angle - encPos) > 0.5) temp -= 1;
 
 	if ((angle - encPos) < -0.5) temp += 1;
+
+	frc::SmartDashboard::PutNumber("encpos", encPos);
 
 	return temp;
 }
