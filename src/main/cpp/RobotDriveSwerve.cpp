@@ -32,8 +32,8 @@ void RobotDriveSwerve::move(double x, double y, double rotation, double angle)
 
 	frontLeftWheel->MoveWheel(	wheelValues[0][0], wheelValues[0][1]);
 	frontRightWheel->MoveWheel(	wheelValues[1][0], wheelValues[1][1]);
-	rearLeftWheel->MoveWheel(	wheelValues[2][0], wheelValues[2][1]);
-	rearRightWheel->MoveWheel(	wheelValues[3][0], wheelValues[3][1]);
+	rearLeftWheel->MoveWheel(	wheelValues[2][0], (wheelValues[2][1]));
+	rearRightWheel->MoveWheel(	wheelValues[3][0], wheelValues[3][1]*180);
 }
 
 void RobotDriveSwerve::StopMotor()

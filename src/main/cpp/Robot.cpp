@@ -70,7 +70,12 @@ void Robot::AutonomousInit() {}
  
 void Robot::AutonomousPeriodic() {}
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+/*  motorEncoder1.reset();
+  motorEncoder2.reset();
+  motorEncoder3.reset();
+  motorEncoder4.reset();*/
+}
 
 void Robot::TeleopPeriodic() {
 
@@ -83,37 +88,12 @@ void Robot::TeleopPeriodic() {
 
     swervy->SetMode();
      //     swervy->move();
-        //swervy->move(1,1,1,1);
+        swervy->move(drive.GetRawAxis(4),drive.GetRawAxis(0),drive.GetRawAxis(5));
          //swervy->StopMotor();
-        swervy->SetMode();
-
-        swervy->move(drive.GetRawAxis(1),drive.GetRawAxis(0),drive.GetRawAxis(2),-999.0);
-
-      fwd = -drive.GetRawAxis(5);
-    	str = drive.GetRawAxis(4);
-    	rcw = drive.GetRawAxis(0);
-    	
-    	//Square the values for finer movement
-    /*	if(fwd < 0)
-    		fwd *= fwd * -1;
-    	else
-    		fwd *= fwd;
-    	
-    	if(str < 0)
-    		str *= str * -1;
-    	else
-    		str *= str;
-    	
-    	if(rcw < 0)
-    		rcw *= rcw * -1;
-    	else
-      */
-    		rcw *= rcw;
-        swervy->move(fwd,str,rcw);
-        frc::SmartDashboard::PutNumber("x1",drive.GetRawAxis(1));
-        frc::SmartDashboard::PutNumber("x2",drive.GetRawAxis(0));
-        frc::SmartDashboard::PutNumber("rotate",drive.GetRawAxis(2));
-
+        // rearRightWheel->MoveWheel(drive.GetRawAxis(5), .87*(drive.GetRawAxis(0)*180));
+    	  frc::SmartDashboard::PutNumber("motor3Encoder",motorEncoder3->GetDistance());
+        frc::SmartDashboard::PutNumber("angle3",motorEncoder3->GetDistance()*.87);
+      
 }
 
 void Robot::DisabledInit() {}

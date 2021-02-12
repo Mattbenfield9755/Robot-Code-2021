@@ -11,32 +11,36 @@ SwerveMath::SwerveMath(double m_length, double m_width)
 	R = sqrt((LENGTH*LENGTH) + (WIDTH*WIDTH));
 }
 
-double** SwerveMath::Calculate(double x, double y, double z, double angle)
+double** SwerveMath::Calculate(double x1, double y1, double x2, double angle)
 {
+	R = sqrt((LENGTH*LENGTH)+(WIDTH*WIDTH));
 	if(angle != -999.0)
 	{
 		angle = angle * PI / 180;
-		double temp = x * cos(angle) + y * sin(angle);
-		y = -x * sin(angle) + y * cos(angle);
-		x = temp;
+		double temp = x1 * cos(angle) + y1 * sin(angle);
+		y1 = -x1 * sin(angle) + y1 * cos(angle);
+		x1 = temp;
 	}
 
-	double A = y - z*(LENGTH/R);
-	double B = y + z*(LENGTH/R);
-	double C = x - z*(WIDTH/R);
-	double D = x + z*(WIDTH/R);
+	//x=strafe
+	//y=fwd
+	//z=rotate
 
-	double wSpeed1 = sqrt(B*B + C*C);
-	double wAngle1 = atan2(B,C) * 180/PI;
+	
+    double a = x1 - x2 * (LENGTH / R);
+    double b = x1 + x2 * (LENGTH / R);
+    double c = y1 - x2 * (WIDTH / R);
+    double d = y1 + x2 * (WIDTH / R);
 
-	double wSpeed2 = sqrt(B*B + D*D);
-	double wAngle2 = atan2(B,D) * 180/PI;
+    double wSpeed1 = sqrt((a * a) + (d * d));
+    double wSpeed2 = sqrt((a * a) + (c * c));
+    double wSpeed3 = sqrt ((b * b) + (d * d));
+    double wSpeed4 = sqrt ((b * b) + (c * c));
 
-	double wSpeed3 = sqrt(A*A + D*D);
-	double wAngle3 = atan2(A,D) * 180/PI;
-
-	double wSpeed4 = sqrt(A*A + C*C);
-	double wAngle4 = atan2(A,C) * 180/PI;
+    double wAngle1 = atan2 (a, d) / M_PI;
+    double wAngle2 = atan2 (a, c) / M_PI;
+    double wAngle3 = atan2 (b, d) / M_PI;
+    double wAngle4 = atan2 (b, c) / M_PI;
 
 	//normalizes speeds so they're within the ranges of -1 to 1
 	double maxSpeed = wSpeed1;
@@ -64,6 +68,10 @@ double** SwerveMath::Calculate(double x, double y, double z, double angle)
 							{wSpeed3, wAngle3}
 						};
 	double** output = CopyArray(temp);
+	frc::SmartDashboard::PutNumber("wAngle1",temp[0][1]);
+	frc::SmartDashboard::PutNumber("wAngle2",temp[1][1]);
+	frc::SmartDashboard::PutNumber("wAngle3",temp[2][1]);
+	frc::SmartDashboard::PutNumber("wAngle4",temp[3][1]);
 
 	return output;
 }
