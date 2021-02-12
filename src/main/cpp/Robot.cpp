@@ -5,7 +5,7 @@
 #include "RobotDriveSwerve.h"
 #include "ctre/Phoenix.h"
 
-  const double GEAR_RATIO = (1988/1.2);
+  const double GEAR_RATIO = 1;
   const double L = 19;
   const double W = 27.5; 
   double fwd, str, rcw;
@@ -68,13 +68,15 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() {}
  
-void Robot::AutonomousPeriodic() {}
-
-void Robot::TeleopInit() {
-/*  motorEncoder1.reset();
+void Robot::AutonomousPeriodic() {
+   motorEncoder1.reset();
   motorEncoder2.reset();
   motorEncoder3.reset();
-  motorEncoder4.reset();*/
+  motorEncoder4.reset();
+}
+
+void Robot::TeleopInit() {
+
 }
 
 void Robot::TeleopPeriodic() {
@@ -87,13 +89,17 @@ void Robot::TeleopPeriodic() {
    static RobotDriveSwerve *swervy = new RobotDriveSwerve(frontLeftWheel, frontRightWheel, rearLeftWheel, rearRightWheel,W,L);
 
     swervy->SetMode();
-     //     swervy->move();
-        swervy->move(drive.GetRawAxis(4),drive.GetRawAxis(0),drive.GetRawAxis(5));
-         //swervy->StopMotor();
-        // rearRightWheel->MoveWheel(drive.GetRawAxis(5), .87*(drive.GetRawAxis(0)*180));
+    swervy->move(drive.GetRawAxis(4),drive.GetRawAxis(0),drive.GetRawAxis(5));
+         
+
+        int angle4 = motorEncoder4->GetDistance()*.87;
+            	  frc::SmartDashboard::PutNumber("motor1Encoder",motorEncoder1->GetDistance());
+
+    	  frc::SmartDashboard::PutNumber("motor2Encoder",motorEncoder2->GetDistance());
     	  frc::SmartDashboard::PutNumber("motor3Encoder",motorEncoder3->GetDistance());
-        frc::SmartDashboard::PutNumber("angle3",motorEncoder3->GetDistance()*.87);
-      
+
+    	  frc::SmartDashboard::PutNumber("motor4Encoder",motorEncoder4->GetDistance());
+
 }
 
 void Robot::DisabledInit() {}
