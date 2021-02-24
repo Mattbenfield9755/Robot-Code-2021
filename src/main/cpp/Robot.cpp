@@ -5,17 +5,11 @@
 #include "RobotDriveSwerve.h"
 #include "ctre/Phoenix.h"
 
-RobotDriveSwerve encoderReset;
-
   const double GEAR_RATIO = 1;
   const double L = 19;
   const double W = 27.5; 
   double fwd, str, rcw;
 
-  static int ZERO1 = 0;
-	static int ZERO2 = 0;
-	static int ZERO3 = 0;
-	static int ZERO4 = 0;
 
   frc::Joystick drive{0};
   
@@ -75,7 +69,7 @@ void Robot::RobotPeriodic() {}
 void Robot::AutonomousInit() {}
  
 void Robot::AutonomousPeriodic() {
-  motorEncoder1.reset();
+   motorEncoder1.reset();
   motorEncoder2.reset();
   motorEncoder3.reset();
   motorEncoder4.reset();
@@ -87,23 +81,21 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() {
 
-  static GenericEnclosure * frontLeftWheel = new GenericEnclosure("frontLeftWheel", speedMotor1, angleMotor1, motorEncoder1, GEAR_RATIO);
-  static GenericEnclosure * frontRightWheel = new GenericEnclosure("frontRightWheel", speedMotor2, angleMotor2, motorEncoder2, GEAR_RATIO);
-  static GenericEnclosure * rearLeftWheel = new GenericEnclosure("rearLeftWheel", speedMotor3, angleMotor3, motorEncoder3, GEAR_RATIO); 
-  static GenericEnclosure * rearRightWheel = new GenericEnclosure("rearRightWheel", speedMotor4, angleMotor4, motorEncoder4, GEAR_RATIO);
+  static GenericEnclosure *frontLeftWheel = new GenericEnclosure("frontLeftWheel", speedMotor1, angleMotor1, motorEncoder1, GEAR_RATIO);
+  static GenericEnclosure *frontRightWheel = new GenericEnclosure("frontRightWheel", speedMotor2, angleMotor2, motorEncoder2, GEAR_RATIO);
+ static  GenericEnclosure *rearLeftWheel = new GenericEnclosure("rearLeftWheel", speedMotor3, angleMotor3, motorEncoder3, GEAR_RATIO); 
+  static GenericEnclosure *rearRightWheel = new GenericEnclosure("rearRightWheel", speedMotor4, angleMotor4, motorEncoder4, GEAR_RATIO);
 
-  static RobotDriveSwerve * swervy = new RobotDriveSwerve(frontLeftWheel, frontRightWheel, rearLeftWheel, rearRightWheel,W,L);
+   static RobotDriveSwerve *swervy = new RobotDriveSwerve(frontLeftWheel, frontRightWheel, rearLeftWheel, rearRightWheel,W,L);
 
-  encoderReset.zeroEnclosures(ZERO1, ZERO2, ZERO3, ZERO4);
+    swervy->SetMode();
+    swervy->move(drive.GetRawAxis(5),0,0);
+        int angle4 = motorEncoder4->GetDistance()*.87;
 
-  swervy->SetMode();
-  swervy->move(drive.GetRawAxis(4),drive.GetRawAxis(0),drive.GetRawAxis(5));
-  
-       
-  frc::SmartDashboard::PutNumber("motor1Encoder",motorEncoder1->GetDistance());
-  frc::SmartDashboard::PutNumber("motor2Encoder",motorEncoder2->GetDistance());
-  frc::SmartDashboard::PutNumber("motor3Encoder",motorEncoder3->GetDistance());
-  frc::SmartDashboard::PutNumber("motor4Encoder",motorEncoder4->GetDistance());
+    	  frc::SmartDashboard::PutNumber("motor2Encoder",motorEncoder2->GetDistance());
+    	  frc::SmartDashboard::PutNumber("motor3Encoder",motorEncoder3->GetDistance());
+
+    	  frc::SmartDashboard::PutNumber("motor4Encoder",motorEncoder4->GetDistance());
 
 }
 

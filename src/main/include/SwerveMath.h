@@ -3,6 +3,11 @@
 #include <math.h>
 #include "frc/WPILib.h"
 
+  static int ZERO1 = 0;
+static int ZERO2 = 0;
+	static int ZERO3 = 0;
+	static int ZERO4 = 0;
+
 /**
  * This class handles the calculations required to drive a robot using SwerveDrive
  * wheels.  This class supports both robot centric and field centric modes.  Field

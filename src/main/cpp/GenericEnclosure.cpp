@@ -116,6 +116,7 @@ double GenericEnclosure::ConvertAngle(double angle, double encoderValue)
 
 	return temp;
 }
+
 std::string GenericEnclosure::GetName()
 {
 	return name;
