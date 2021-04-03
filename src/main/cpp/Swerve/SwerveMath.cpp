@@ -1,5 +1,6 @@
-#include "SwerveMath.h"
+#include "Swerve/SwerveMath.h"
 #include <stdexcept>
+
 
 SwerveMath::SwerveMath(double m_length, double m_width)
 {
@@ -21,23 +22,22 @@ double** SwerveMath::Calculate(double x, double y, double z, double angle)
 		x = temp;
 	}
 
-	double A = y - z*(LENGTH/R);
-	double B = y + z*(LENGTH/R);
-	double C = x - z*(WIDTH/R);
-	double D = x + z*(WIDTH/R);
+    y *= -1;
 
-	double wSpeed1 = sqrt(B*B + C*C);
-	double wAngle1 = atan2(B,C) * 180/PI;
+    double a = x - z * (LENGTH / R);
+    double b = x + z * (LENGTH / R);
+    double c = y - z * (WIDTH / R);
+    double d = y + z * (WIDTH / R);
 
-	double wSpeed2 = sqrt(B*B + D*D);
-	double wAngle2 = atan2(B,D) * 180/PI;
+    double wSpeed3 = sqrt ((a * a) + (d * d));
+    double wSpeed2 = sqrt ((a * a) + (c * c));
+    double wSpeed4 = sqrt ((b * b) + (d * d));
+    double wSpeed1 = sqrt ((b * b) + (c * c));
 
-	double wSpeed3 = sqrt(A*A + D*D);
-	double wAngle3 = atan2(A,D) * 180/PI;
-
-	double wSpeed4 = sqrt(A*A + C*C);
-	double wAngle4 = atan2(A,C) * 180/PI;
-
+    double wAngle3 = atan2 (a, d) / PI;
+    double wAngle2 = atan2 (a, c) / PI;
+    double wAngle4 = atan2 (b, d) / PI;
+    double wAngle1 = atan2 (b, c) / PI;
 	//normalizes speeds so they're within the ranges of -1 to 1
 	double maxSpeed = wSpeed1;
 	if(wSpeed2 > maxSpeed) maxSpeed = wSpeed2;
@@ -51,17 +51,25 @@ double** SwerveMath::Calculate(double x, double y, double z, double angle)
 		wSpeed3/=maxSpeed;
 		wSpeed4/=maxSpeed;
 	}
-	//Normalizes angles so they are within -1 to 1
+
+	wAngle1 = (wAngle1) /.87;
+	wAngle2 = (wAngle2) /.87;
+	wAngle3 = (wAngle3) / .87;
+	wAngle4 = (wAngle4) / .87;
+
+	
+
 	double temp[4][2] =	{	{wSpeed2, wAngle2},
 							{wSpeed1, wAngle1},
 							{wSpeed4, wAngle4},
 							{wSpeed3, wAngle3}
 						};
 	double** output = CopyArray(temp);
-	frc::SmartDashboard::PutNumber("wAngle1",wAngle1);
-	frc::SmartDashboard::PutNumber("wAngle2",wAngle2);
-	frc::SmartDashboard::PutNumber("wAngle3",wAngle3);
-	frc::SmartDashboard::PutNumber("wAngle4",wAngle4);
+
+	frc::SmartDashboard::PutNumber("wAngle1", wAngle1);
+	frc::SmartDashboard::PutNumber("wAngle2", wAngle2);
+	frc::SmartDashboard::PutNumber("wAngle3", wAngle3);
+	frc::SmartDashboard::PutNumber("wAngle4", wAngle4);
 
 	return output;
 }

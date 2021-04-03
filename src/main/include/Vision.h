@@ -13,13 +13,14 @@
 #include "frc/PIDController.h"
 #include <iostream> 
 #include <string> 
+#include <rev/CANSparkMax.h>
 
 class Vision
 {
 private:
   frc::Joystick auxilary{1};
-	WPI_VictorSPX * spin = new WPI_VictorSPX(4);
-  std::shared_ptr<NetworkTable> ITable = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  rev::CANSparkMax spin{13, rev::CANSparkMax::MotorType::kBrushless}; 
+   std::shared_ptr<NetworkTable> ITable = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
 
 public:
   Vision();

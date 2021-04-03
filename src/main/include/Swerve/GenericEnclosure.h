@@ -1,9 +1,7 @@
 #pragma once
-
-#include "frc/WPILib.h"
 #include "ctre/Phoenix.h"
-
-#include "SwerveEnclosure.h"
+#include "frc/WPILib.h"
+#include "Swerve/SwerveEnclosure.h"
 
 /*
  * Used for enclosing a speed controller (rotational movement) and aanother speed
@@ -67,7 +65,7 @@ public:
 private:
 	/*
 	 * Using the desired angle for the wheel and the current encoder position,
-	 * it determines if the wheel could be efficient by reversing the rotat
+	 * it determines if the wheel could be efficient by reversing the rotation
 	 * and movement direction.
 	 */
 	bool ShouldReverse(double desiredPos);
@@ -88,7 +86,6 @@ private:
 	std::shared_ptr<WPI_VictorSPX> turnMotor;
 	std::unique_ptr<frc::PIDController> controlPID;
 	std::shared_ptr<frc::Encoder> encoder;
-
 	std::string name;
 	double gearRatio = 1988/1.2;
 };

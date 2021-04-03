@@ -1,5 +1,6 @@
-#include "GenericEnclosure.h"
-
+#include "Swerve/GenericEnclosure.h"
+#include "ctre/Phoenix.h"
+ frc::Joystick poo{0};
 GenericEnclosure::GenericEnclosure(	std::string name,
 									std::shared_ptr<WPI_TalonSRX> m_moveMotor,
 									std::shared_ptr<WPI_VictorSPX> m_turnMotor,
@@ -12,15 +13,16 @@ GenericEnclosure::GenericEnclosure(	std::string name,
 	gearRatio = m_gearRatio;
 
 	encoder = m_encoder;
-	controlPID.reset(new frc::PIDController(-.06,0, 0, encoder.get(), turnMotor.get()));
-	controlPID->SetSetpoint(90);
+	controlPID.reset(new frc::PIDController(-.03, 0.0, 0.0, encoder.get(), turnMotor.get()));
+	controlPID->SetSetpoint(0);
 	encoder->Reset();
 }
 GenericEnclosure::~GenericEnclosure(){ return; }
 
 void GenericEnclosure::MoveWheel(double speedVal, double rotationVal)
 {
-	rotationVal = ConvertAngle(rotationVal, GetEncoderVal());
+
+//	rotationVal = ConvertAngle(rotationVal, GetEncoderVal());
 
 	if(ShouldReverse(rotationVal))
 	{
@@ -58,8 +60,7 @@ void GenericEnclosure::SetPID(double P, double I, double D, double F)
 
 double GenericEnclosure::GetEncoderVal()
 {
-	return encoder->GetDistance();
-	
+	return encoder->Get();
 }
 
 void GenericEnclosure::SetSpeed(double speedVal)
@@ -71,8 +72,6 @@ void GenericEnclosure::SetAngle(double desiredAngle)
 {
 	controlPID->SetSetpoint(desiredAngle);
 	controlPID->Enable();
-
-	frc::SmartDashboard::PutNumber("Setpoint", desiredAngle);
 }
 
 bool GenericEnclosure::ShouldReverse(double wa)
@@ -111,8 +110,6 @@ double GenericEnclosure::ConvertAngle(double angle, double encoderValue)
 	if ((angle - encPos) > 0.5) temp -= 1;
 
 	if ((angle - encPos) < -0.5) temp += 1;
-
-	frc::SmartDashboard::PutNumber("encpos", encPos);
 
 	return temp;
 }

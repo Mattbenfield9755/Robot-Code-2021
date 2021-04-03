@@ -14,29 +14,29 @@ void Vision::AutoTarget()
 
   if (aim_error > 0.01f)
   {
-    spin->Set(correction);
+    spin.Set(correction);
   }else if (aim_error < -0.01f)
   {
-    spin->Set(correction);
+    spin.Set(correction);
   }else
   {
-    spin->Set(0);
+    spin.Set(0);
   }
 }
 
 void Vision::visionStop()
 {
     nt::NetworkTableInstance::GetDefault().GetTable("limelight")->PutNumber("ledMode", 1);
-  spin->Set(0);
+  spin.Set(0);
 
 }
 
 void Vision::leftManual()
 {
-  spin->Set(5);
+  spin.Set(5);
 }
 
 void Vision::rightManual()
 {
-  spin->Set(-5);
+  spin.Set(-5);
 }

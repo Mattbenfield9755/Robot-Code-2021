@@ -3,11 +3,6 @@
 #include <math.h>
 #include "frc/WPILib.h"
 
-  static int ZERO1 = 0;
-static int ZERO2 = 0;
-	static int ZERO3 = 0;
-	static int ZERO4 = 0;
-
 /**
  * This class handles the calculations required to drive a robot using SwerveDrive
  * wheels.  This class supports both robot centric and field centric modes.  Field
@@ -42,11 +37,11 @@ public:
 	 * 	2	Rear Left Speed		Rear Left Angle
 	 * 	3	Rear Right Speed	Rear Right Angle
 	 */
-	double** Calculate(double STR, double FWD, double RCW, double angle = -999);
+	double** Calculate(double fwd, double str, double rot, double angle = -999);
 
 private:
 	static constexpr double NO_ANGLE = -999;
-	static constexpr double PI = 3.14;
+	static constexpr double PI = M_PI;
 
 	/*
 	 * Copies the speed and angle values into a pointer in order to be used by

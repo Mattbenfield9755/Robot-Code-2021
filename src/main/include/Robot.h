@@ -1,13 +1,17 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 #pragma once
 
 #include <frc/TimedRobot.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/Joystick.h.>
+#include <frc/DriverStation.h>
+#include "AHRS.h"
 
-class Robot : public frc::TimedRobot {
- public:
+using namespace frc;
+
+class Robot : public TimedRobot
+{
+public:
+ 
   void RobotInit() override;
   void RobotPeriodic() override;
 
@@ -22,4 +26,10 @@ class Robot : public frc::TimedRobot {
 
   void TestInit() override;
   void TestPeriodic() override;
+
+private:
+  const static int joystickChannel = 0;
+  AHRS *ahrs;
+  int autoLoopCounter;
 };
+
